@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 // pages
 import HomePage from "../views/HomePage.vue";
+import MyCalendly from "../views/MyCalendly.vue";
+import CreateEvent from '../views/CreateEvent.vue'
 
 const routes = [
   {
@@ -13,6 +15,22 @@ const routes = [
     component: HomePage,
     meta: {
       title: "home",
+    },
+  },
+  {
+    path: "/myCalendly",
+    name: "calendly",
+    component: MyCalendly,
+    meta: {
+      title: "myCalendly",
+    },
+  },
+  {
+    path: "/CreateEvent",
+    name: "CreateEvent",
+    component: CreateEvent,
+    meta: {
+      title: "CreateEvent",
     },
   },
 ];

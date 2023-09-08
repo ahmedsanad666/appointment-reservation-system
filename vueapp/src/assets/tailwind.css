@@ -3,3 +3,8 @@
 @tailwind components;
 
 @tailwind utilities;
+
+
+.headerText{
+    @apply text-center md:text-3xl text-2xl my-3 py-3 font-bold tracking-wider;
+}
