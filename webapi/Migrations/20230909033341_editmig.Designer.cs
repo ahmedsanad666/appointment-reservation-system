@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230909033341_editmig")]
+    partial class editmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7b0b4c19-3c36-409d-8238-53be2a04e714",
+                            Id = "1d3f6dfe-1d8b-4116-8ae9-aac47462e72f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3fe8fb28-ae44-42ec-8b8e-2ff3112e7371",
+                            Id = "9bb8d4d7-91d1-420c-ab9b-14ac8634d722",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -288,6 +291,9 @@ namespace webapi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("GuestId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HostId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white  text-slate-800 md:w-[70%] w-[90%] m-auto">
+  <nav class="bg-white text-slate-800 md:w-[70%] w-[90%] m-auto" v-if="ShowNav">
     <div
       class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
     >
@@ -32,14 +32,23 @@
           class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
         >
           <li>
-            <router-link
-              :to="{ name: 'home' }"
-             
-              >Home</router-link
-            >
+            <router-link :to="{ name: 'home' }">Home</router-link>
           </li>
           <li>
             <router-link :to="{ name: 'calendly' }">My calendly</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'waitingAppointments' }"
+              >Wating Appointments</router-link
+            >
+          </li>
+          <li>
+            <router-link :to="{ name: 'BookEvent' }"
+              >Book Appointment</router-link
+            >
+          </li>
+          <li>
+            <button @click="logOut()">logOut</button>
           </li>
         </ul>
       </div>
@@ -48,7 +57,32 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      ShowNav: true,
+    };
+  },
+  methods: {
+    checkcurrentroute(route) {
+      if (route.meta.title === "Auth") {
+        this.ShowNav = false;
+      } else {
+        this.ShowNav = true;
+      }
+    },
+
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.replace("/auth");
+    },
+  },
+  watch: {
+    $route(newRoute) {
+      this.checkcurrentroute(newRoute);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -59,8 +93,7 @@ li {
   }
 }
 
-.router-link-active{
-
-color: rgb(66, 40, 150);
+.router-link-active {
+  color: rgb(66, 40, 150);
 }
 </style>

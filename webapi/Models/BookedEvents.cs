@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi.Models
 {
@@ -6,10 +7,12 @@ namespace webapi.Models
     {
         [Key]
         public int Id { get; set; }
-        public  string HostId { get; set; }
-        public string GuestId { get; set; }
+       
+        public string ApiUserId { get; set; }
         public ApiUser ApiUser { get; set; }
-
+        public string GuestId { get; set; }
+        [NotMapped]
+        public ApiUser GuestData { get; set; }
         public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
     }

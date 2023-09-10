@@ -38,7 +38,7 @@ namespace webapi.Controllers
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult> Register([FromBody] ApiUser apiUser)
-        {
+            {
             var users = await _userManager.Users.ToListAsync();
             bool isFirstUser = users.Count == 0;
             string roleName = isFirstUser ? "Admin" : "User";

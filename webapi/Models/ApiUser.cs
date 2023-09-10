@@ -5,7 +5,7 @@ namespace webapi.Models
 {
     public class ApiUser : IdentityUser
     {
-       public string UserName { get; set; }
+     
         [NotMapped]
         public string Password { get; set; }
     }

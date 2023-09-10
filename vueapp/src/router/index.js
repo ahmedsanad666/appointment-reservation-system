@@ -2,7 +2,13 @@ import { createRouter, createWebHashHistory } from "vue-router";
 // pages
 import HomePage from "../views/HomePage.vue";
 import MyCalendly from "../views/MyCalendly.vue";
-import CreateEvent from '../views/CreateEvent.vue'
+import CreateEvent from "../views/CreateEvent.vue";
+import WaitingAppointments from '../views/WaitingAppointments.vue'
+import AllEvents from "../views/AllEvents.vue";
+import AuthPage from "../views/Auth/AuthPage.vue";
+
+import store from "../store/index.js";
+import EventDetails from "../views/EventDetails.vue";
 
 const routes = [
   {
@@ -10,11 +16,39 @@ const routes = [
     redirect: "/home",
   },
   {
+    path: "/Auth",
+    name: "Auth",
+    component: AuthPage,
+    meta: {
+      title: "Auth",
+      requiresUnauth: true,
+    },
+  },
+  {
     path: "/home",
     name: "home",
     component: HomePage,
     meta: {
       title: "home",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/BookEvent",
+    name: "BookEvent",
+    component: AllEvents,
+    meta: {
+      title: "BookEvent",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/waitingAppointments",
+    name: "waitingAppointments",
+    component: WaitingAppointments,
+    meta: {
+      title: "waitingAppointments",
+      requiresAuth: true,
     },
   },
   {
@@ -23,6 +57,16 @@ const routes = [
     component: MyCalendly,
     meta: {
       title: "myCalendly",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/EvetnDetails/:id",
+    name: "EvetnDetails",
+    component: EventDetails,
+    meta: {
+      title: "EventDetails",
+      requiresAuth: true,
     },
   },
   {
@@ -31,6 +75,7 @@ const routes = [
     component: CreateEvent,
     meta: {
       title: "CreateEvent",
+      requiresAuth: true,
     },
   },
 ];
@@ -42,7 +87,13 @@ const router = createRouter({
 
 router.beforeEach((to, _, next) => {
   document.title = to.meta.title;
-  next();
+  if (to.meta.requiresAuth && !store.getters["auth/isAuthenticated"]) {
+    next("/auth");
+  } else if (to.meta.requiresUnauth && store.getters["auth/isAuthenticated"]) {
+    next("/");
+  } else {
+    next();
+  }
 });
 
 export default router;

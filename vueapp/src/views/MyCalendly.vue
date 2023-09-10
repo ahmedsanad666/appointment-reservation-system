@@ -1,6 +1,7 @@
 <template>
   <section class="py-4">
     <h1 class="headerText">My Calendly</h1>
+    <h2 class="text-center text-xl font-bold" v-if="error">{{ error }}</h2>
 
     <div class="container px-4 py-3">
       <FullCalendar :options="calendarOptions" />
@@ -33,16 +34,36 @@ export default {
         select: this.handleSelect, // Use handleSelect event
         eventClick: this.clickk,
         events: [],
+        error: "",
       },
     };
   },
   computed: {},
   methods: {
-    getAllEvents() {
-      const events = this.$store.getters.getEvents;
-      this.calendarOptions.events = events;
-      console.log(this.events);
+    async getEvents() {
+      const userId = this.$store.getters["auth/userId"];
+
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("calender/UserEvents", userId);
+        this.calendarOptions.events = this.$store.getters["calender/AllEvents"];
+
+        this.calendarOptions.events = this.calendarOptions.events.map((el) => {
+          const start = el.startTime;
+          const end = el.endTime;
+          return {
+            ...el,
+            start: start,
+            end: end, 
+          };
+        });
+        console.log(this.calendarOptions.events);
+      } catch (e) {
+        this.error = e.message || "failed to get data";
+      }
+      this.isLoading = false;
     },
+
     clickk(en) {
       console.log(en);
     },
@@ -51,20 +72,10 @@ export default {
       console.log(arg);
       const start = arg.startStr;
       const end = arg.endStr; // Correct the variable name
-      const evet = {
-        title: "test",
-        start,
-        end, // Correct the variable name
-        allDay: arg.allDay,
-        color: "yellow", // an option!
-        textColor: "black", // an option!
-      };
-      this.$store.commit("setEvents", evet);
-      this.getAllEvents();
     },
   },
   created() {
-    this.getAllEvents();
+    this.getEvents();
   },
 };
 </script>

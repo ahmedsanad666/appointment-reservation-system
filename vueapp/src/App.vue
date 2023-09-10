@@ -21,6 +21,7 @@ export default {
   },
   mounted() {
     initFlowbite();
+    this.$store.dispatch("auth/tryLogin");
   },
 };
 </script>

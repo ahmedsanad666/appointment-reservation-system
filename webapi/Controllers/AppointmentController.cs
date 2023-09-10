@@ -17,27 +17,25 @@ namespace webapi.Controllers
             _context = context;
         }
 
-        // GET: api/Courses
+
+
+        // GET: api/all
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<Appointment>>> AllAppointments()
+        {
+            var all = await _context.Appointments.Include(q => q.ApiUser).ToListAsync();
+            return all;
+        }
+
+        // GET: api/Courses/id
+        [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAllAppointments(string id)
         {
                 var all = await _context.Appointments.Where(q => q.ApiUserId == id).ToListAsync();
             return all;
         }
 
-        // GET: api/Courses/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Appointment>> GetCourse(int id)
-        {
-            var result = await _context.Appointments.FindAsync(id);
 
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            return result;
-        }
 
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -78,7 +76,7 @@ namespace webapi.Controllers
             _context.Appointments.Add(course);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+            return CreatedAtAction(nameof(PostCourse), new { id = course.Id }, course);
         }
 
         // DELETE: api/Courses/5

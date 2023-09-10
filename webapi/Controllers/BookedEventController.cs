@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi.Data;
@@ -10,10 +11,13 @@ namespace webapi.Controllers
     [ApiController]
     public class BookedEventController : ControllerBase
     {
+        private readonly UserManager<ApiUser> _userManager;
+
         private readonly ApplicationDbContext _context;
 
-        public BookedEventController(ApplicationDbContext context)
+        public BookedEventController(ApplicationDbContext context , UserManager<ApiUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -21,7 +25,12 @@ namespace webapi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookedEvents>>> BookedEvents()
         {
-            var all = await _context.BookedEvents.ToListAsync();
+            var all = await _context.BookedEvents.Include(q => q.ApiUser).Include(w=>w.Appointment).ToListAsync();
+
+            foreach (var item in all)
+            {
+                item.GuestData = _userManager.Users.FirstOrDefault(q => q.Id == item.GuestId);
+            }
             return all;
         }
 
@@ -61,12 +70,12 @@ namespace webapi.Controllers
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BookedEvents>> PostCourse(BookedEvents BookedEvent)
+        public async Task<ActionResult<BookedEvents>> PostBookedEvent(BookedEvents BookedEvent)
         {
             _context.BookedEvents.Add(BookedEvent);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCourse", new { id = BookedEvent.Id }, BookedEvent);
+            return CreatedAtAction(nameof(PostBookedEvent), new { id = BookedEvent.Id }, BookedEvent);
         }
 
         // DELETE: api/Courses/5
