@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <nav-bar />
-    <!-- navbar -->
+    <!-- navbar  ff-->
 
     <router-view />
     <!-- . footer -->
