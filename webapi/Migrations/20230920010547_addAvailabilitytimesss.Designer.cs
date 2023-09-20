@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920010547_addAvailabilitytimesss")]
+    partial class addAvailabilitytimesss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "662ac8ac-5a87-442a-a6fd-544a14214dae",
+                            Id = "d208d50b-d138-4fea-8d2e-817b579b45cc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "092c353e-092c-4034-b353-4996e3d0fe3c",
+                            Id = "828811e4-44fc-43dd-ae4b-a25d73e5ab82",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -251,9 +254,6 @@ namespace webapi.Migrations
                     b.Property<string>("ContactType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DaysString")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -316,11 +316,11 @@ namespace webapi.Migrations
                     b.Property<string>("DaysString")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EndTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
-                    b.Property<string>("StartTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

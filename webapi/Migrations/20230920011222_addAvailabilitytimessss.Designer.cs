@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920011222_addAvailabilitytimessss")]
+    partial class addAvailabilitytimessss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "662ac8ac-5a87-442a-a6fd-544a14214dae",
+                            Id = "b82fb408-43d3-4169-af90-0fdea73b9df9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "092c353e-092c-4034-b353-4996e3d0fe3c",
+                            Id = "325000c4-b31f-4e3c-a2fe-6054fdb5ce47",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -249,9 +252,6 @@ namespace webapi.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ContactType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DaysString")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")

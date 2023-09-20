@@ -41,37 +41,41 @@
             </option>
           </select>
         </div>
+
         <div class="controller">
-          <label for="location">Location</label>
-          <input
-            type="text"
-            placeholder="Phone Number"
-            v-model.trim="location"
-            v-if="selectedContactType === 'phone'"
-            required=""
-          />
-          <input
-            type="text"
-            placeholder="Meeting Link"
-            v-model.trim="location"
-            required=""
-            v-else
-          />
+          <label for="start">Start Date</label>
+          <input type="date" id="start" v-model="startDate" required="" />
+        </div>
+
+        <div class="controller">
+          <label for="end">End Date</label>
+          <input type="date" id="end" v-model="endDate" required="" />
         </div>
         <div class="controller">
           <label for="start">Start Time</label>
-          <input
-            type="datetime-local"
-            id="start"
-            v-model="startTime"
-            required=""
-          />
+          <input type="time" id="start" v-model="startTime" required="" />
         </div>
         <div class="controller">
           <label for="end">End Time</label>
-          <input type="datetime-local" id="end" v-model="endTime" required="" />
+          <input type="time" id="end" v-model="endTime" required="" />
         </div>
-
+        <div class="my-3 py-3">
+          <label class="availability-form__label">Days Available:</label>
+          <div class="flex gap-6 flex-wrap">
+            <label
+              v-for="(day, index) in days"
+              :key="index"
+              class="availability-form__day-label cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                v-model="selectedDays"
+                :value="day"
+                class="availability-form__day-checkbox cursor-pointer"
+              />{{ day }}
+            </label>
+          </div>
+        </div>
         <button
           type="submit"
           class="py-1 px-6 bg-gray-600 text-white rounded-lg hover:bg-slate-500"
@@ -87,16 +91,28 @@
 export default {
   data() {
     return {
+      days: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
       contactTypes: ["phone", "zoom", "googleMeet"],
       //.... event data
+      selectedDays: [],
       title: "",
       selectedContactType: "zoom",
-      location: "",
       description: "",
+      startDate: "",
+      endDate: "",
       startTime: "",
       endTime: "",
       isLoading: false,
       error: "",
+      events: [],
     };
   },
   methods: {
@@ -105,12 +121,37 @@ export default {
       const payload = {
         title: this.title,
         contactType: this.selectedContactType,
-        location: this.location,
         description: this.description,
-        startTime: this.startTime,
-        endTime: this.endTime,
+        startTime: this.startTime, //
+        endTime: this.endTime, //
         apiUserId: userId,
       };
+
+      console.log(this.selectedDays);
+      const startDate = new Date(this.startDate);
+      const endDate = new Date(this.endDate);
+
+      while (startDate <= endDate) {
+        const eventDate = new Date(startDate);
+        const dayName = this.days[startDate.getDay()];
+        if (this.selectedDays.includes(dayName)) {
+          const event = {
+            title: this.title,
+            contactType: this.selectedContactType,
+            description: this.description,
+            startTime:
+              eventDate.toISOString().split("T")[0] + `T${this.startTime}:00`, //
+            endTime:
+              eventDate.toISOString().split("T")[0] + `T${this.endTime}:00`, //
+            apiUserId: userId,
+          };
+          this.events.push(event);
+        }
+
+        startDate.setDate(startDate.getDate() + 1);
+      }
+      console.log(this.events);
+
       this.isLoading = true;
       try {
         await this.$store.dispatch("calender/addApp", payload);

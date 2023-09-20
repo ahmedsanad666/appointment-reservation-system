@@ -186,10 +186,23 @@ export default {
       }
       this.isLoading = false;
     },
+    async checkAvailableTimes() {
+      const userId = this.$store.getters["auth/userId"];
+      try {
+        await this.$store.dispatch("availability/UserAvailability", userId);
+        const data = this.$store.getters["availability/avaibaleTimes"];
+        if (!data.availableTimes) {
+          this.$router.replace("/availableTimes");
+        }
+      } catch (e) {
+        this.error = "failed to get availability Times";
+      }
+    },
   },
 
   created() {
     this.getEvents();
+    this.checkAvailableTimes();
   },
 };
 </script>

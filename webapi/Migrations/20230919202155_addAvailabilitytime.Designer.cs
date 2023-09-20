@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230919202155_addAvailabilitytime")]
+    partial class addAvailabilitytime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "662ac8ac-5a87-442a-a6fd-544a14214dae",
+                            Id = "b87ccb66-8aa6-4449-a064-b9ceb46b5902",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "092c353e-092c-4034-b353-4996e3d0fe3c",
+                            Id = "7d96e6e5-215c-4dbb-bc09-5e9448d21d06",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -251,9 +254,6 @@ namespace webapi.Migrations
                     b.Property<string>("ContactType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DaysString")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -300,33 +300,6 @@ namespace webapi.Migrations
                     b.HasIndex("AppointmentId");
 
                     b.ToTable("BookedEvents");
-                });
-
-            modelBuilder.Entity("webapi.Models.UserAvailability", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApiUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DaysString")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EndTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StartTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApiUserId");
-
-                    b.ToTable("UserAvailabilities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -404,15 +377,6 @@ namespace webapi.Migrations
                     b.Navigation("ApiUser");
 
                     b.Navigation("Appointment");
-                });
-
-            modelBuilder.Entity("webapi.Models.UserAvailability", b =>
-                {
-                    b.HasOne("webapi.Models.ApiUser", "ApiUser")
-                        .WithMany()
-                        .HasForeignKey("ApiUserId");
-
-                    b.Navigation("ApiUser");
                 });
 #pragma warning restore 612, 618
         }

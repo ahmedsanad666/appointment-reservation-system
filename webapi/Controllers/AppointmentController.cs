@@ -71,12 +71,21 @@ namespace webapi.Controllers
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Appointment>> PostCourse(Appointment course)
+        public async Task<ActionResult<Appointment>> PostApp(List<Appointment> apps)
         {
-            _context.Appointments.Add(course);
-            await _context.SaveChangesAsync();
+            var result = new List<Appointment>();
 
-            return CreatedAtAction(nameof(PostCourse), new { id = course.Id }, course);
+            foreach( var  el in apps)
+            {
+                _context.Appointments.Add(el);
+                await _context.SaveChangesAsync();
+                result.Add(el);
+                
+            }
+         
+           
+
+            return CreatedAtAction(nameof(PostApp),result);
         }
 
         // DELETE: api/Courses/5

@@ -3,10 +3,10 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import MyCalendly from "../views/MyCalendly.vue";
 import CreateEvent from "../views/CreateEvent.vue";
-import WaitingAppointments from '../views/WaitingAppointments.vue'
+import WaitingAppointments from "../views/WaitingAppointments.vue";
 import AllEvents from "../views/AllEvents.vue";
 import AuthPage from "../views/Auth/AuthPage.vue";
-
+import AvailableTimes from "../views/AvailableTimes.vue";
 import store from "../store/index.js";
 import EventDetails from "../views/EventDetails.vue";
 
@@ -58,6 +58,14 @@ const routes = [
     meta: {
       title: "myCalendly",
       requiresAuth: true,
+    },
+  },
+  {
+    path: "/availableTimes",
+    name: "availability",
+    component: AvailableTimes,
+    meta: {
+      title: "availability",
     },
   },
   {

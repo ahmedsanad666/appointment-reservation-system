@@ -11,6 +11,8 @@ namespace webapi.Data
         {
 
         }
+        
+        public DbSet<UserAvailability> UserAvailabilities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<BookedEvents> BookedEvents { get; set; 
         }
