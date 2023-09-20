@@ -18,15 +18,8 @@
           <span class="font-bold">Title : </span>{{ event.appointment.title }}
         </h2>
         <h3 class="font-bold">
-          {{ event.appointment.contactType }} :
-          <span v-if="event.appointment.contactType === 'phone'">
-            {{ event.appointment.location }}</span
-          >
-          <span v-else>
-            <a class="text-[#2980b9]" :href="event.appointment.location">
-              Event Link</a
-            ></span
-          >
+          <span class="font-bold">Location : </span
+          >{{ event.appointment.contactType }}
         </h3>
         <div>
           <span class="font-bold">starts at : </span> {{ event.fullSrtTime }}
@@ -45,7 +38,7 @@
             {{ event.appointment.description }}
           </p>
         </div>
-      
+
         <div>
           <span class="font-bold">Host : </span>
           <span> {{ event.apiUser.userName }}</span>
@@ -53,6 +46,26 @@
         <div>
           <span class="font-bold">Guest : </span>
           <span> {{ event.guestData.userName }}</span>
+        </div>
+        <div>
+          <div class="flex flex-col gap-2" v-if="mood === 'showInput' && current === key">
+           
+            <label for="link">Add Meeting Link</label>
+            <input id="link" v-model.trim="link" type="text" />
+            <a
+              @click="check"
+              class="w-1/2 text-center py-1 px-4 bg-sky-800 text-white rounded-md"
+              :href="link"
+              >Start Metting</a
+            >
+          </div>
+          <button
+            v-else
+            @click="showInput(key)"
+            class="py-1 px-4 bg-sky-800 text-white rounded-md"
+          >
+            Start Metting
+          </button>
         </div>
       </div>
     </div>
@@ -63,14 +76,21 @@
 export default {
   data() {
     return {
+      link: "",
+      mood: "",
       events: [],
       isLoading: false,
       error: "",
       updating: false,
       current: 0,
+      current:0
     };
   },
   methods: {
+    showInput(k) {
+      this.current = k
+      this.mood = "showInput";
+    },
     toggleText(key) {
       const p = this.$refs.desBox[key];
       if (p.style.overflow === "hidden") {
@@ -90,7 +110,9 @@ export default {
       try {
         await this.$store.dispatch("calender/BookEvent");
         const bookedEvents = this.$store.getters["calender/BookedEvents"];
-        this.events = bookedEvents.filter(el => el.appointment.apiUserId === userId);
+        this.events = bookedEvents.filter(
+          (el) => el.appointment.apiUserId === userId
+        );
         this.events = this.events.map((el) => {
           const startTime = new Date(el.appointment.startTime);
           const endTime = new Date(el.appointment.endTime);
@@ -117,7 +139,6 @@ export default {
       }
       this.isLoading = false;
     },
-   
   },
   created() {
     this.getEvents();

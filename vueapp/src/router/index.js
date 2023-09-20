@@ -9,6 +9,7 @@ import AuthPage from "../views/Auth/AuthPage.vue";
 import AvailableTimes from "../views/AvailableTimes.vue";
 import store from "../store/index.js";
 import EventDetails from "../views/EventDetails.vue";
+import ChooseTime from '../views/ChooseTime.vue';
 
 const routes = [
   {
@@ -30,6 +31,15 @@ const routes = [
     component: HomePage,
     meta: {
       title: "home",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/ChooseTime/:eventId",
+    name: "ChooseTime",
+    component: ChooseTime,
+    meta: {
+      title: "ChooseTime",
       requiresAuth: true,
     },
   },

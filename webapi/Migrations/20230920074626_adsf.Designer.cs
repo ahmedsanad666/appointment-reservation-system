@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920074626_adsf")]
+    partial class adsf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "83a874d4-748f-41fc-9b5f-675b6781a9b5",
+                            Id = "9b13ba33-e6bf-4ee6-9ad1-8b0a5007d27f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ab3a2f71-0057-4abb-ae73-673e32debb12",
+                            Id = "ab1c020b-551b-4269-85d4-00e659807c6c",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -249,9 +252,6 @@ namespace webapi.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ContactType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")

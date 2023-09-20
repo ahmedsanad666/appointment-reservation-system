@@ -113,6 +113,7 @@ export default {
       isLoading: false,
       error: "",
       events: [],
+      customId: new Date().getTime(),
     };
   },
   methods: {
@@ -136,6 +137,7 @@ export default {
         const dayName = this.days[startDate.getDay()];
         if (this.selectedDays.includes(dayName)) {
           const event = {
+            customId: this.customId +  "",
             title: this.title,
             contactType: this.selectedContactType,
             description: this.description,
@@ -154,7 +156,7 @@ export default {
 
       this.isLoading = true;
       try {
-        await this.$store.dispatch("calender/addApp", payload);
+        await this.$store.dispatch("calender/addApp", this.events);
         this.$router.replace("/");
       } catch (e) {
         this.error = e.message || "failed to send data";

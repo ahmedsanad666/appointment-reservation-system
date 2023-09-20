@@ -17,19 +17,14 @@
         <h2 class="text-slate-800">
           <span class="font-bold">Title : </span>{{ event.title }}
         </h2>
-        <h3 class="font-bold">
-          {{ event.contactType }} :
-          <span v-if="event.contactType === 'phone'">
-            {{ event.location }}</span
-          >
-          <span v-else>
-            <a class="text-[#2980b9]" :href="event.location">
-              Event Link</a
-            ></span
-          >
-        </h3>
+        <h3 class="font-bold">Location: {{ event.contactType }}</h3>
         <div>
-          <span class="font-bold">starts at : </span> {{ event.fullSrtTime }}
+          <span class="font-bold">starts at : </span>
+          {{ event.startDay.substring(0, 10) }}
+        </div>
+        <div>
+          <span class="font-bold">ends at : </span>
+          {{ event.endDay.substring(0, 10) }}
         </div>
 
         <div>
@@ -46,21 +41,34 @@
           </p>
         </div>
         <div class="">
-          <img
+          <router-link
+            class="border py-1 px-5 bg-[#2980b9] text-white rounded-lg hover:bg-teal-600 cursor-pointer"
+            :to="`/ChooseTime/${event.customId
+}`"
+          >
+            Choose time
+          </router-link>
+          <!-- <img
             src="../assets/imgs/loading.gif   "
             class="   "
             v-if="updating && current === key"
           />
           <div v-else>
-          <button   class=" py-1 px-5 bg-[#96999b] text-white rounded-lg " disabled v-if="event.booked">Booked</button>
             <button
-            v-else
-              @click="BookEvent(key, event.id, event.apiUser.id)"
-              class="border py-1 px-5 bg-[#2980b9] text-white rounded-lg hover:bg-teal-600  cursor-pointer"
+              class="py-1 px-5 bg-[#96999b] text-white rounded-lg"
+              disabled
+              v-if="event.booked"
             >
-              Book Now
+              Booked
             </button>
-          </div>
+            <button
+              v-else
+              @click="BookEvent(key, event.id, event.apiUser.id)"
+              class="border py-1 px-5 bg-[#2980b9] text-white rounded-lg hover:bg-teal-600 cursor-pointer"
+            >
+            Choose time
+            </button>
+          </div> -->
         </div>
         <div>
           <span class="font-bold">Host : </span>
@@ -132,6 +140,44 @@ export default {
           };
         });
         this.events = this.events.filter((e) => e.apiUser.id !== userId);
+        const groupedEvents = {};
+
+        // Iterate through the events array
+        this.events.forEach((event) => {
+          const customId = event.customId;
+          const startTime = new Date(event.startTime);
+          const endTime = new Date(event.endTime);
+
+          const durationInMilliseconds = endTime - startTime;
+          const durationInMinutes = durationInMilliseconds / 60000;
+
+          // If the customId doesn't exist in the groupedEvents object, create it
+          if (!groupedEvents[customId]) {
+            groupedEvents[customId] = {
+              title: event.title,
+              description: event.description,
+              startDay: event.startTime,
+              endDay: event.endTime,
+              apiUserId: event.apiUserId,
+              booked: event.booked,
+              contactType: event.contactType,
+              duration: durationInMinutes,
+              apiUser: { ...event.apiUser },
+              customId:event.customId
+            };
+          } else {
+            // Update the endDay if the current event's endTime is later
+            if (event.endTime > groupedEvents[customId].endDay) {
+              groupedEvents[customId].endDay = event.endTime;
+            }
+          }
+        });
+
+        // Convert the groupedEvents object into an array
+        const groupedEventsArray = Object.values(groupedEvents);
+
+        this.events = groupedEventsArray;
+        console.log(this.events)
       } catch (e) {
         this.error = e.message || "failed to get data";
       }

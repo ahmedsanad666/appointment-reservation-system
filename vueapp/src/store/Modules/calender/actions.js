@@ -16,7 +16,7 @@ export default {
     responseData.forEach((element) => {
       all.push(element);
     });
-console.log(all)
+    console.log(all);
     context.commit("setEventsToBooked", all);
   },
 
@@ -37,6 +37,7 @@ console.log(all)
     context.commit("setEvents", UserEvents);
   },
   async addApp(_, paylaod) {
+    console.log(JSON.stringify(paylaod));
     const response = await fetch(BaseLink, {
       method: "POST",
 
@@ -46,9 +47,12 @@ console.log(all)
       body: JSON.stringify(paylaod),
     });
 
+    console.log(response);
     if (!response.ok) {
+      console.log(response);
       const error = "failed to send data";
       throw error;
+      
     }
   },
   //...................... book

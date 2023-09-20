@@ -27,24 +27,25 @@
             <span class="font-bold">Title : </span>{{ event.title }}
           </h2>
           <h3 class="font-bold">
-            {{ event.contactType }} :
-            <span v-if="event.contactType === 'phone'">
-              {{ event.location }}</span
-            >
-            <span v-else>
-              <a class="text-[#2980b9]" :href="event.location">
-                Event Link</a
-              ></span
-            >
+          Location : {{ event.contactType }}
           </h3>
           <div>
             <span class="font-bold">Duration : </span> {{ event.duration }} Min
           </div>
+          <div>
+            <span class="font-bold">startDay : </span>
+            {{ event.startDay.substring(0, 10) }}
+          </div>
+          <div>
+            <span class="font-bold">endDay : </span>
+            {{ event.endDay.substring(0, 10) }}
+          </div>
+
           <div class="py-4 my-2">
             <router-link
               class="border py-1 px-5 border-[#2980b9] rounded-lg hover:bg-slate-300"
-              :to="`/EvetnDetails/${event.id}`"
-              >More details</router-link
+              :to="{name  : 'calendly'}"
+              >show on Calender</router-link
             >
           </div>
         </div>
@@ -164,7 +165,6 @@ export default {
             fullSrtTime: fullSrtTime,
           };
         });
-        console.log(this.BookedAppointments);
         // ........
         await this.$store.dispatch("calender/UserEvents", userId);
         this.events = this.$store.getters["calender/AllEvents"];
@@ -181,6 +181,42 @@ export default {
             duration: durationInMinutes,
           };
         });
+
+        const groupedEvents = {};
+
+        // Iterate through the events array
+        this.events.forEach((event) => {
+          const customId = event.customId;
+          const startTime = new Date(event.startTime);
+          const endTime = new Date(event.endTime);
+
+          const durationInMilliseconds = endTime - startTime;
+          const durationInMinutes = durationInMilliseconds / 60000;
+
+          // If the customId doesn't exist in the groupedEvents object, create it
+          if (!groupedEvents[customId]) {
+            groupedEvents[customId] = {
+              title: event.title,
+              description: event.description,
+              startDay: event.startTime,
+              endDay: event.endTime,
+              apiUserId: event.apiUserId,
+              booked: event.booked,
+              contactType: event.contactType,
+              duration: durationInMinutes,
+            };
+          } else {
+            // Update the endDay if the current event's endTime is later
+            if (event.endTime > groupedEvents[customId].endDay) {
+              groupedEvents[customId].endDay = event.endTime;
+            }
+          }
+        });
+
+        // Convert the groupedEvents object into an array
+        const groupedEventsArray = Object.values(groupedEvents);
+
+        this.events = groupedEventsArray;
       } catch (e) {
         this.error = e.message || "failed to get data";
       }

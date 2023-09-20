@@ -15,14 +15,15 @@ namespace webapi.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public bool Booked { get; set; } = false;
-        [NotMapped]
-        public ICollection<string> Days { get; set; }
-        public string DaysString
-        {
-            get { return string.Join(",", Days); }
-            set { Days = value.Split(',').ToList(); }
+        public string CustomId { get; set; }
+        //[NotMapped]
+        //public ICollection<string> Days { get; set; }
+        //public string DaysString
+        //{
+        //    get { return string.Join(",", Days); }
+        //    set { Days = value.Split(',').ToList(); }
 
-        }
+        //}
         public string ApiUserId { get; set; }
         public ApiUser ApiUser { get; set; }
     }
