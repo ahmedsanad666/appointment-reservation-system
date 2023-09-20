@@ -2,6 +2,8 @@ const BaseLink = "https://localhost:7063/api/appointment";
 const BookEvent = "https://localhost:7063/api/BookedEvent";
 
 export default {
+
+  
   //...................... category
   async eventToBooked(context) {
     const response = await fetch(BaseLink);
@@ -75,6 +77,20 @@ export default {
   },
   async AddBookedEvent(_, paylaod) {
     const response = await fetch(BookEvent, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paylaod),
+    });
+    console.log(JSON.stringify(paylaod));
+    if (!response.ok) {
+      const error = "failed to send data";
+      throw error;
+    }
+  },
+  async sendEmail(_, paylaod) {
+    const response = await fetch(`${BookEvent}/sendEmail`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

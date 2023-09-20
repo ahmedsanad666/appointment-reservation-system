@@ -72,14 +72,65 @@ namespace webapi.Controllers
         [HttpPost]
         public async Task<ActionResult<BookedEvents>> PostBookedEvent(BookedEvents BookedEvent)
         {
+
+
+            // email data 
+            var hostName = "";
+            var gestName = "";
+            var eventTitle = " ";
+            DateTime startDate ;
+
+
+            var hostData = await _userManager.FindByIdAsync(BookedEvent.ApiUserId);
+            if(hostData != null)
+            {
+                hostName = hostData.UserName;
+            }
+
+            var gestData = await _userManager.FindByIdAsync(BookedEvent.GuestId);
+
+            if(gestData != null)
+            {
+                gestName = gestData.UserName;
+            }
+
+            var eventData = await _context.Appointments.FirstOrDefaultAsync(w => w.Id == BookedEvent.AppointmentId);
+
+            if(eventData != null)
+            {
+                eventTitle = eventData.Title;
+                startDate = eventData.StartTime;
+            }
+
+
             _context.BookedEvents.Add(BookedEvent);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostBookedEvent), new { id = BookedEvent.Id }, BookedEvent);
         }
 
-        // DELETE: api/Courses/5
-        [HttpDelete("{id}")]
+        [HttpPost]
+        [Route("sendEmail")]
+        public async Task PostBookedEvent(EmailData data)
+        
+        {
+            // start email data
+            var Link = data.MeetingLink;
+            var eventTitle = " ";
+            DateTime startDate;
+
+            /// end email data
+            var eventData = await _context.Appointments.FirstOrDefaultAsync(w => w.Id == data.EventId);
+
+            if (eventData != null)
+            {
+                eventTitle = eventData.Title;
+                startDate = eventData.StartTime;
+            }
+            
+        }
+            // DELETE: api/Courses/5
+            [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(int id)
         {
             var BookedEv = await _context.BookedEvents.FindAsync(id);
@@ -94,6 +145,8 @@ namespace webapi.Controllers
             return NoContent();
         }
 
+
+       
         private bool EventExists(int id)
         {
             return _context.BookedEvents.Any(e => e.Id == id);

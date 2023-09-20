@@ -48,16 +48,18 @@
           <span> {{ event.guestData.userName }}</span>
         </div>
         <div>
-          <div class="flex flex-col gap-2" v-if="mood === 'showInput' && current === key">
-           
+          <div
+            class="flex flex-col gap-2"
+            v-if="mood === 'showInput' && current === key"
+          >
             <label for="link">Add Meeting Link</label>
             <input id="link" v-model.trim="link" type="text" />
-            <a
-              @click="check"
+            <button
+              @click="sendEmail(event.appointmentId)"
               class="w-1/2 text-center py-1 px-4 bg-sky-800 text-white rounded-md"
-              :href="link"
-              >Start Metting</a
             >
+              Start Metting
+            </button>
           </div>
           <button
             v-else
@@ -83,12 +85,25 @@ export default {
       error: "",
       updating: false,
       current: 0,
-      current:0
+      current: 0,
     };
   },
   methods: {
+    async sendEmail(eventId) {
+      const payload = {
+        meetingLink: this.link,
+        eventId: eventId,
+      };
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("calender/sendEmail", payload);
+      } catch (e) {
+        this.error = e.message || "failed to get email";
+      }
+      this.isLoading = false;
+    },
     showInput(k) {
-      this.current = k
+      this.current = k;
       this.mood = "showInput";
     },
     toggleText(key) {
