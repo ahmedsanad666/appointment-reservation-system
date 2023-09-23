@@ -48,6 +48,11 @@
             >
           </li>
           <li>
+            <router-link :to="{ name: 'RoomPage' }"
+              >Room</router-link
+            >
+          </li>
+          <li>
             <router-link :to="{ name: 'BookEvent' }"
               >Book Appointment</router-link
             >

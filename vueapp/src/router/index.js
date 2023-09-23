@@ -9,7 +9,8 @@ import AuthPage from "../views/Auth/AuthPage.vue";
 import AvailableTimes from "../views/AvailableTimes.vue";
 import store from "../store/index.js";
 import EventDetails from "../views/EventDetails.vue";
-import ChooseTime from '../views/ChooseTime.vue';
+import ChooseTime from "../views/ChooseTime.vue";
+import RoomPage from "../views/Video/RoomPage.vue";
 
 const routes = [
   {
@@ -93,6 +94,16 @@ const routes = [
     component: CreateEvent,
     meta: {
       title: "CreateEvent",
+      requiresAuth: true,
+    },
+  },
+  //...............
+  {
+    path: "/RoomPage",
+    name: "RoomPage",
+    component: RoomPage,
+    meta: {
+      title: "RoomPage",
       requiresAuth: true,
     },
   },
