@@ -97,6 +97,7 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch("calender/sendEmail", payload);
+        window.location = this.link;
       } catch (e) {
         this.error = e.message || "failed to get email";
       }

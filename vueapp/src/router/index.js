@@ -11,6 +11,7 @@ import store from "../store/index.js";
 import EventDetails from "../views/EventDetails.vue";
 import ChooseTime from "../views/ChooseTime.vue";
 import RoomPage from "../views/Video/RoomPage.vue";
+import VideoRoom from '../views/Video/VideoRoom.vue';
 
 const routes = [
   {
@@ -104,6 +105,15 @@ const routes = [
     component: RoomPage,
     meta: {
       title: "RoomPage",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/room/:roomId",
+    name: "VideoRoom",
+    component: VideoRoom,
+    meta: {
+      title: "videoRoom",
       requiresAuth: true,
     },
   },

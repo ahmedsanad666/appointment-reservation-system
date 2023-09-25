@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Twilio Video Chat</h1>
+    <button @click="createRoom">Create Room</button>
     <div v-if="!roomName">
       <input v-model="roomNameInput" placeholder="Enter a room name" />
       <button @click="joinRoom">Join Room</button>
@@ -28,12 +29,32 @@ export default {
     };
   },
   methods: {
+    async createRoom() {
+      try {
+       
+        const response = await fetch("https://localhost:7063/api/ApiToken", {
+          method: "POST",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const roomId = data.roomId;
+          localStorage.setItem("roomToken", data.token);
+          // Redirect to the room with the roomId
+          this.$router.replace(`/room/${roomId}`);
+        } else {
+          console.error("Failed to create room");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async joinRoom() {
       // Get the access token from your server
       await this.getAccessToken().then((data) => {
-        console.log(data);
         this.roomName = this.roomNameInput;
         this.token = data.data.token; // Store the token for use later
+        localStorage.setItem("roomToken", this.token);
         console.log(this.token);
       });
 
