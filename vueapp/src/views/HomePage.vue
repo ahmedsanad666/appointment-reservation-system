@@ -239,8 +239,7 @@ export default {
   created() {
     this.getEvents();
     this.checkAvailableTimes();
-  },
-};
+  }};
 </script>
 
 <style lang="scss" scoped>

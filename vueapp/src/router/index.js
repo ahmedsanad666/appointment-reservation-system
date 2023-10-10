@@ -11,8 +11,10 @@ import store from "../store/index.js";
 import EventDetails from "../views/EventDetails.vue";
 import ChooseTime from "../views/ChooseTime.vue";
 import RoomPage from "../views/Video/RoomPage.vue";
-import VideoRoom from '../views/Video/VideoRoom.vue';
+import VideoRoom from "../views/Video/VideoRoom.vue";
 
+/// ............ video chat
+import VideoChat from "../views/VideoRoom/VidoChat.vue";
 const routes = [
   {
     path: "/",
@@ -114,6 +116,16 @@ const routes = [
     component: VideoRoom,
     meta: {
       title: "videoRoom",
+      requiresAuth: true,
+    },
+  },
+  //...... video chat
+  {
+    path: "/VideoChat/:userId",
+    name: "videoChat",
+    component: VideoChat,
+    meta: {
+      title: "video chat",
       requiresAuth: true,
     },
   },

@@ -48,27 +48,15 @@
           <span> {{ event.guestData.userName }}</span>
         </div>
         <div>
-          <div
-            class="flex flex-col gap-2"
-            v-if="mood === 'showInput' && current === key"
-          >
-            <label for="link">Add Meeting Link</label>
-            <input id="link" v-model.trim="link" type="text" />
-            <button
-              @click="sendEmail(event.appointmentId)"
-              class="w-1/2 text-center py-1 px-4 bg-sky-800 text-white rounded-md"
-            >
-              Start Metting
-            </button>
-          </div>
-          <button
-            v-else
-            @click="showInput(key)"
-            class="py-1 px-4 bg-sky-800 text-white rounded-md"
-          >
-            Start Metting
-          </button>
+          <router-link
+        
+        :to="`/VideoChat/${userId}`"
+         class="py-1 px-4 bg-sky-800 text-white rounded-md"
+       >
+         Start Metting
+       </router-link>
         </div>
+       
       </div>
     </div>
   </section>
@@ -86,7 +74,11 @@ export default {
       updating: false,
       current: 0,
       current: 0,
+      userId:'',
     };
+  },
+  computed(){
+   
   },
   methods: {
     async sendEmail(eventId) {
@@ -158,6 +150,7 @@ export default {
   },
   created() {
     this.getEvents();
+    this.userId  = this.$store.getters["auth/userId"];
   },
 };
 </script>
