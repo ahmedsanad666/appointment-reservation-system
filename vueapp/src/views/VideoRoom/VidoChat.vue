@@ -1,6 +1,8 @@
 <template>
   <div v-if="!joined" class="text-center my-8">
-    <button   class="py-1 px-4 bg-sky-800 text-white rounded-md" @click="join">join meeting</button>
+    <button class="py-1 px-4 bg-sky-800 text-white rounded-md" @click="join">
+      join meeting
+    </button>
   </div>
   <section class="gap-5 border">
     <div id="stream-wrapper border w-full">
@@ -40,14 +42,12 @@ export default {
     return {
       appId: "f4502f04da9d4a51a439141d140772b7",
 
-      channelName: "mainChannel",
+      channelName: "test",
       client: null,
-      token:
-        "007eJxTYJD42ZyZ2L7RaCNTl+b8R7qHZZ7Uvi1Vqvy9+vTtmvrDK3sVGNJMTA2M0gxMUhItU0wSTQ0TTYwtDU0MUwxNDMzNjZLMPz1WSW0IZGT4GrOaiZEBAkF8bobcxMw854zEvLzUHAYGAL9OJCg=",
       localTracks: [],
       remoteUsers: {},
       joined: false,
-      userId: "sdjafklafjakfhsdakfhkadsdsfa",
+      userId: 0,
     };
   },
   methods: {
@@ -60,45 +60,29 @@ export default {
 
       //...................
       try {
-        // const response = await fetch("https://localhost:7063/api/Token", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     channelName: this.channelName,
-        //     Uid: this.userId,
-        //   }),
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // });
+        const response = await fetch(
+          `https://create-agora-token.onrender.com/access_token?channelName=${this.channelName}`
+        );
 
-        // if (!response.ok) {
-        //   console.log("failed");
-        //   throw new Error("Failed to fetch Agora token");
-        // }
+        if (!response.ok) {
+          console.log("failed");
+          throw new Error("Failed to fetch Agora token");
+        }
 
-        // const { token } = await response.json();
+        const { token } = await response.json();
 
-        // console.log(token, this.appId, this.channelName, null);
+        console.log(token, this.appId, this.channelName, );
 
         const uid = await this.client.join(
-          // token,
           this.appId,
           this.channelName,
-          this.token,
-          // this.userId
-          null
+          token,
+         this.userId
+        
         );
 
         console.error(uid);
-        console.log("...................................");
-        // Rest of your Agora SDK integration code here
-
-        //...........
-        // let uid = await this.client.join(
-        //   this.appId,
-        //   this.channelName,
-        //   this.token,
-        //   null
+      
         // );
         this.localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
 
@@ -126,7 +110,7 @@ export default {
           player.remove();
         }
         player = `<div class="video-container" id="user-container-${user.uid}">
-                        <div class="video-player" id="user-${user.uid}"></div> 
+                        <div class="video-player" id="user-${user.uid}"></div>
                  </div>`;
         document
           .getElementById("video-streams")
